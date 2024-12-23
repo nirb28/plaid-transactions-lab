@@ -62,6 +62,12 @@ npm run watch
 
 The server will start running on port 8000 and will update whenever you make a change to the server files. To use the app, navigate to `localhost:8000` in your browser.
 
+#### Sandbox test credentials
+
+Use `user_transactions_dynamic` as the username, and any non-blank string as the password. You can call `/transactions/refresh` to simulate a transactions update in Sandbox. This will generate new pending transactions, all previously pending transactions will be moved to posted, and the amount of one previous transaction will be incremented by $1.00. All appropriate transaction webhooks will also be fired at this time.
+
+You can also use the standard `user_good` / `pass_good` credentials, but the transactions data will be less realistic, and you won't be able to simulate updates. 
+
 #### Problems?
 
 On some occasions (usually if the app fails to start up properly the first time), you will end up in a state where the database file has been created, but none of the tables have been added. This usually manifests as a `SQLITE_ERROR: no such table: users` error. If you receive this error, you can fix it by deleting the `appdata.db` file in your `database` folder and then restarting the server.
