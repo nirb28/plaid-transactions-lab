@@ -213,3 +213,4 @@ fastlane/test_output
 iOSInjectionProject/
 
 transactions/finished/nohup.out
+__pycache__
