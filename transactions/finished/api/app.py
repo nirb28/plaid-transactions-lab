@@ -7,8 +7,10 @@ import os
 from dotenv import load_dotenv
 from plaid.model.sandbox_public_token_create_request import SandboxPublicTokenCreateRequest
 from plaid.model.products import Products  
+from flask_cors import CORS  # Add CORS support
 
 app = Flask(__name__)
+CORS(app)  # Enable Cross-Origin Resource Sharing
 load_dotenv()
 
 # Configure Plaid client
@@ -135,4 +137,4 @@ def get_transactions():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    app.run(host='0.0.0.0', port=3200, debug=True)
