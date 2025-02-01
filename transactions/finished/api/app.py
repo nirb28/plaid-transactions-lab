@@ -136,5 +136,21 @@ def get_transactions():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/list_transaction_columns', methods=['GET'])
+def list_transaction_columns():
+    try:
+        # Fetch a sample transaction to get the columns
+        response = client.transactions_get(access_token, start_date='2020-01-01', end_date='2020-02-01')
+        transactions = response['transactions']
+        
+        if transactions:
+            # Get the columns from the first transaction
+            columns = transactions[0].keys()
+            return jsonify({'columns': list(columns)})
+        else:
+            return jsonify({'error': 'No transactions found'}), 404
+    except plaid.ApiException as e:
+        return jsonify({'error': str(e)}), 400
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3200, debug=True)
