@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 import plaid
 from plaid.api import plaid_api
 from plaid.model.transactions_get_request import TransactionsGetRequest
+from plaid.model.accounts_get_request import AccountsGetRequest
 import os
 from dotenv import load_dotenv
 from plaid.model.sandbox_public_token_create_request import SandboxPublicTokenCreateRequest
@@ -136,19 +137,16 @@ def get_transactions():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@app.route('/list_transaction_columns', methods=['GET'])
-def list_transaction_columns():
+@app.route('/accounts', methods=['GET'])
+def get_accounts():
     try:
-        # Fetch a sample transaction to get the columns
-        response = client.transactions_get(access_token, start_date='2020-01-01', end_date='2020-02-01')
-        transactions = response['transactions']
+        access_token = request.args.get('access_token')
+        if not access_token:
+            return jsonify({'error': 'Missing required access_token parameter'}), 400
         
-        if transactions:
-            # Get the columns from the first transaction
-            columns = transactions[0].keys()
-            return jsonify({'columns': list(columns)})
-        else:
-            return jsonify({'error': 'No transactions found'}), 404
+        request_obj = AccountsGetRequest(access_token=access_token)
+        accounts_response = client.accounts_get(request_obj)
+        return jsonify(accounts_response.to_dict())
     except plaid.ApiException as e:
         return jsonify({'error': str(e)}), 400
 
